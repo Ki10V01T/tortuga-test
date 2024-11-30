@@ -14,8 +14,7 @@ public class GameSession implements Callable<String>{
     @Override
     public String call() throws Exception {
         while (true) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'call'");
+            
         }
     }
 }
