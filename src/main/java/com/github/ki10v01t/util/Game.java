@@ -6,13 +6,10 @@ import com.github.ki10v01t.util.message.Type;
 
 public class Game {
     private int[][] gameField;
-    private int stepCounter;
-    private int winner;
 
     public Game() {
         this.gameField = new int[3][3];
-        this.stepCounter = 0;
-        this.winner = 0;
+        initGameField();
     }
 
     /**
