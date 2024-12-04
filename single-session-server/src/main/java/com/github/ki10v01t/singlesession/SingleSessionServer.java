@@ -26,7 +26,8 @@ public class SingleSessionServer {
     private Condition enoughPlayers;
 
     public SingleSessionServer(ServerSocket serverSocket) {
-        this.logger = LogManager.getLogger("SingleSessionServer");
+        //this.logger = LogManager.getLogger("SingleSessionServer");
+        this.logger = LogManager.getLogger(SingleSessionServer.class);
         this.serverSock = serverSocket;
         this.playersList = new ArrayList<Player>(2);
         this.threadPool = Executors.newFixedThreadPool(1);
@@ -35,6 +36,8 @@ public class SingleSessionServer {
     }
 
     public void start() {
+        //logger.trace(String.format("Server starts listening at port %d", serverSock.getLocalPort()));
+        logger.info(String.format("Server starts listening at port %d", serverSock.getLocalPort()));
         Integer playerId = 0;
         while(true) {
             try {
@@ -54,6 +57,7 @@ public class SingleSessionServer {
                     playerId++;
                     Player player = new Player(newClientSock, playerId);
                     playersList.add(player);
+                    logger.info(String.format("Player %d has been connected to server", playerId));
                 }
             } catch (IOException ioe) {
                 logger.error(ioe.getMessage(), ioe);
@@ -63,5 +67,6 @@ public class SingleSessionServer {
                 logger.error(ie.getMessage(), ie);
             }
         }
+        logger.info("Server job stops");
     }
 }

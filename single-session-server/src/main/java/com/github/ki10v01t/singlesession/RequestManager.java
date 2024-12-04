@@ -26,11 +26,13 @@ public class RequestManager implements Runnable {
         this.locker = locker;
         this.enoughPlayers = enoughPlayers;
         this.gameSession = new Game();
-        this.logger = LogManager.getLogger("RequestManager");  
+        this.logger = LogManager.getLogger(RequestManager.class);  
     }
 
     @Override
     public void run() {
+        logger.info(String.format("RequestManager started at thread with name %s", Thread.currentThread().getName()));
+
         try {
             while(playersList.size() < 2) {
                 playersList.get(0).sendMessage(new Message.MessageBuilder(Type.INFO).setText("Waiting for player 2").build());
@@ -69,18 +71,17 @@ public class RequestManager implements Runnable {
                                 break;
                         }
                     }
-
-
-
                     if(exitFlag) break;
+
                 } catch (IOException ioe) {
+                    logger.error(ioe.getMessage(), ioe);
                     break;
                 } catch (ClassNotFoundException cnfe) {
+                    logger.error(cnfe.getMessage(), cnfe);
                     break;
                 }
             }
-
-
+            logger.info(String.format("RequestManager finilized itself work at thread %s", Thread.currentThread().getName()));
         }
     }
 

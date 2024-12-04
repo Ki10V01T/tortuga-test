@@ -7,6 +7,11 @@
   <groupId>com.github.ki10v01t</groupId>
   <artifactId>tortuga-test</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <modules>
+    <module>single-session-server</module>
+    <module>single-session-client</module>
+  </modules>
 
   <name>tortuga-test</name>
   <!-- FIXME change it to the project's website -->
