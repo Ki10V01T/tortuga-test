@@ -1,4 +1,4 @@
-package com.github.ki10v01t.server;
+package com.github.ki10v01t.multisession.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -13,18 +13,17 @@ import java.util.concurrent.Executors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.github.ki10v01t.util.GameSession;
-import com.github.ki10v01t.util.Gamer;
+import com.github.ki10v01t.multisession.GameProcessor;
+import com.github.ki10v01t.util.Player;
 import com.github.ki10v01t.util.message.InitMessage;
 import com.github.ki10v01t.util.message.Message;
 
 public class GameServer {
     private final Logger logger;
     private final ServerSocket serverSock;
-    private final List<CompletableFuture<String>> gameSessions;
+    private final CompletableFuture<String> requestProcessor;
     private Socket newClientSock;
     private ExecutorService lobbyThreadPool;
-    private 
 
     public GameServer(ServerSocket serverSocket) {
         this.gameSessions = new ArrayList<>();
@@ -33,15 +32,39 @@ public class GameServer {
         this.lobbyThreadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     }
 
+    private void handShake(Player gamer) throws IOException, ClassNotFoundException{
+        Message msg = new InitMessage("Приветствую, игрок! Ты присоединился к серверу игры в крестики-нолики.\nВыбери необходимое действие:");
+        gamer.sendMessage(msg);
+        msg = gamer.receiveMessage();
+        
+        switch (msg.getCommand()) {
+            case NEW_GAME:
+                initGameSession();
+                break;
+            case EXIT:
+                msg.setText("До новых встреч!");
+                gamer.sendMessage(msg);
+                gamer.getAssociatedSocket().close();
+                break;
+            case STEP:
+                msg = gamer.receiveMessage();
+                break;
+            case APPEND_TO_GAME:
+                break;
+            default:
+                break;
+        }
+    }
+
     public void start() {
         while(true) {
             try {
                 newClientSock = serverSock.accept();
-                Gamer gamer = new Gamer(newClientSock);
+                Player gamer = new Player(newClientSock);
                 
                 InitMessage initMessage = newClientSock.getInputStream().
 
-                gameSessions.add(CompletableFuture.runAsync(new GameSession(null, gamer)));
+                requestProcessor.runAsync(new GameProcessor(null, gamer));
                 
             } catch (IOException ioe) {
                 logger.error(ioe.getMessage(), ioe);
