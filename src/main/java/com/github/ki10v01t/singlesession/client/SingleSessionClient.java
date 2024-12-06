@@ -23,11 +23,11 @@ public class SingleSessionClient {
     }
 
     private void inputProcessor(String userInput, Scanner sc) throws IOException, InputMismatchException{
-        System.out.println("Enter command: ");
+        System.out.println("Enter command in next format: (without breakets) \n[s] where s means 'step'\n[e] or e means 'exit'");
         userInput = sc.next();
         switch (userInput) {
             case "s":
-                System.out.println("enter the coordinates in next format: (without brackets) \n [row]");
+                System.out.println("enter the coordinates in next format: (a number without brackets) \n[row]");
                 int inputRaw = sc.nextInt();
                 System.out.println("[column]");
                 int inputColumn = sc.nextInt();

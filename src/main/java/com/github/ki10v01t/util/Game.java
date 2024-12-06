@@ -119,10 +119,10 @@ public class Game {
             if(gameField[li][li] == -1) {
                 diagonalCheckLeft--;
             }
-            if(gameField[ri][ri] == 1) {
+            if(gameField[li][ri] == 1) {
                 diagonalCheckRight++;
             }
-            if(gameField[ri][ri] == -1) {
+            if(gameField[li][ri] == -1) {
                 diagonalCheckRight--;
             }
         }

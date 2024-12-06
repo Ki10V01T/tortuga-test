@@ -23,6 +23,7 @@ public class RequestManager implements Runnable {
 
     private void disconnectAllClients() {
         playersStorage.removeAllPlayers();
+        disconnectionFlag = true;
     }
 
     private void sendToOnePlayer(Integer id, Message message) throws IOException {
