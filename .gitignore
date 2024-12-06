@@ -46,4 +46,7 @@ replay_pid*
 .history
 .ionide
 
+tortuga-test-client.jar
+tortuga-test-server.jar
+
 # End of https://www.toptal.com/developers/gitignore/api/java,visualstudiocode

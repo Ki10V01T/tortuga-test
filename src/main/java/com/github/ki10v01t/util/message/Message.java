@@ -3,13 +3,14 @@ package com.github.ki10v01t.util.message;
 import java.io.Serializable;
 
 public class Message implements Serializable{
+    //private static final long serialVersionUID = 1L;
     private Command command;
     private Type type;
-    private String text;
+    private String text; 
     private Integer row;
     private Integer column;
 
-    public Message(MessageBuilder messageBuilder) {
+    private Message(MessageBuilder messageBuilder) {
         this.command = messageBuilder.command;
         this.type = messageBuilder.type;
         this.text = messageBuilder.text;

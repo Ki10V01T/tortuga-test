@@ -3,6 +3,7 @@ package com.github.ki10v01t.util;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 import java.net.Socket;
 
 import com.github.ki10v01t.util.message.Message;
@@ -10,13 +11,17 @@ import com.github.ki10v01t.util.message.Message;
 public class Player {
     private Integer playerId;
     private Socket associatedSocket;
-    private ObjectInputStream reader;
-    private ObjectOutputStream writer;
+    // private ObjectInputStream reader;
+    // private ObjectOutputStream writer;
+
+    public Player(Socket associatedSocket) throws IOException {
+        this.associatedSocket = associatedSocket;
+        // this.reader = new ObjectInputStream(associatedSocket.getInputStream());
+        // this.writer = new ObjectOutputStream(associatedSocket.getOutputStream());
+    }
 
     public Player(Socket associatedSocket, Integer playerId) throws IOException {
         this.associatedSocket = associatedSocket;
-        this.reader = new ObjectInputStream(associatedSocket.getInputStream());
-        this.writer = new ObjectOutputStream(associatedSocket.getOutputStream());
         this.playerId = playerId;
     }
 
@@ -37,11 +42,13 @@ public class Player {
     }
 
     public void sendMessage(Message message) throws IOException {
+        ObjectOutputStream writer = new ObjectOutputStream(associatedSocket.getOutputStream());
         writer.writeObject(message);
         writer.flush();
     }
 
-    public Message receiveMessage() throws IOException, ClassNotFoundException {
+    public Message receiveMessage() throws IOException, StreamCorruptedException, ClassNotFoundException {
+        ObjectInputStream reader = new ObjectInputStream(associatedSocket.getInputStream());
         Object inputObject = reader.readObject();
         if(inputObject instanceof Message) {
             return (Message) inputObject;

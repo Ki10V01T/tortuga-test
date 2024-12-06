@@ -3,8 +3,12 @@ package com.github.ki10v01t.util.message;
 public enum Command {
     STEP,
     REFRESH,
+    REPEAT_MSG,
     EXIT,
-    APPEND_TO_GAME,
+    ADD_PLAYER_1,
+    ADD_PLAYER_2,
+    RESTART_GAME,
     END_GAME,
-    NEW_GAME
+    READY,
+    RECONNECT
 }

@@ -14,15 +14,15 @@
             "type": "java",
             "name": "single-session-client",
             "request": "launch",
-            "mainClass": "com.github.ki10v01t.Main",
-            "projectName": "single-session-client"
+            "mainClass": "com.github.ki10v01t.singlesession.client.Main",
+            "projectName": "tortuga-test"
         },
         {
             "type": "java",
             "name": "single-session-server",
             "request": "launch",
-            "mainClass": "com.github.ki10v01t.Main",
-            "projectName": "single-session-server"
+            "mainClass": "com.github.ki10v01t.singlesession.server.Main",
+            "projectName": "tortuga-test"
         },
         {
             "type": "java",

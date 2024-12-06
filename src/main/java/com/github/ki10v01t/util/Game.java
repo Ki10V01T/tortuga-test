@@ -6,9 +6,24 @@ import com.github.ki10v01t.util.message.Type;
 
 public class Game {
     private int[][] gameField;
+    private int stepCounter;
 
     public Game() {
         this.gameField = new int[3][3];
+        this.stepCounter = 0;
+        initGameField();
+    }
+
+    public void printGameField() {
+        for(int i = 0; i < gameField.length; i++) {
+            for(int j = 0; j < gameField[i].length; j++) {
+                System.out.print(gameField[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public void resetGameSession() {
         initGameField();
     }
 
@@ -24,13 +39,13 @@ public class Game {
     }
 
     private boolean boundsCheck(int row, int column) {
-        boolean rowCheck = false, columnCheck = false;
+        boolean rowCheck = true, columnCheck = true;
         if(row < 0 || row > gameField.length-1) {
-            rowCheck = true;
+            rowCheck = false;
         }
 
         if(column < 0 || column > gameField.length-1 ) {
-            columnCheck = true;
+            columnCheck = false;
         }
 
         if(rowCheck && columnCheck) {
@@ -149,6 +164,12 @@ public class Game {
      */
     public Message makeStep(Integer row, Integer column, int value) {
 
+        if(value == 2) {
+            value = -1;
+        }
+        // if(!valueCheck(value)) {
+        //     return new Message.MessageBuilder(Type.ERROR).setText("Error insert invalid column_id or row_id").build();
+        // }
         if(!boundsCheck(row, column) || !valueCheck(value)) {
             return new Message.MessageBuilder(Type.ERROR).setText("Error insert invalid column_id or row_id").build();
         }
@@ -159,9 +180,10 @@ public class Game {
         
         gameField[row][column] = value;
 
+        stepCounter++;
         int winnerPlayer = winnerCheck();
         
-        String endGameMessage;
+        String endGameMessage = null;
         Boolean earlyVictoryFlag = false;
 
         switch (winnerPlayer) {
@@ -174,17 +196,29 @@ public class Game {
                 earlyVictoryFlag = true;
                 break;
             case 0:
-                endGameMessage = "The game ended in a draw.";
+                if(stepCounter == 9) {
+                    endGameMessage = "The game ended in a draw.";
+                    return new Message.MessageBuilder(Type.COMMAND).setCommand(Command.END_GAME).setText(endGameMessage).build();
+                }
                 break;
             default:
                 endGameMessage = "Unexpected result";
+                if(!earlyVictoryFlag) {
+                    return new Message.MessageBuilder(Type.ERROR).setText(endGameMessage).build();
+                }
             break;
         }
 
         if(earlyVictoryFlag) {
+            if(endGameMessage == null) {
+                endGameMessage = "Unexpected result";
+            }
             return new Message.MessageBuilder(Type.COMMAND).setCommand(Command.END_GAME).setText(endGameMessage).build();
         }
   
-        return new Message.MessageBuilder(Type.COMMAND).setCommand(Command.END_GAME).setText(endGameMessage).build();
+        if(value == -1) {
+            value = 2;
+        }
+        return new Message.MessageBuilder(Type.COMMAND).setCommand(Command.REFRESH).setRow(row).setColumn(column).setText(String.valueOf(value)).build();
     }
 }
