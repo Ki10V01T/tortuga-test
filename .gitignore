@@ -46,6 +46,7 @@ replay_pid*
 .history
 .ionide
 
+target/
 tortuga-test-client.jar
 tortuga-test-server.jar
 
